@@ -1,0 +1,16 @@
+#map {
+    height: 90%;
+    width: 100%;
+    position: relative;
+    float: left;
+    display: inline;
+}
+
+#form {
+    height: 90%;
+    width: 40%;
+    top: 0;
+    position: relative;
+    float: right;
+    display: none;
+}
