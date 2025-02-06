@@ -14,31 +14,47 @@
 <body>
     <div id="map">
         <script src="{{ url_for('static', filename='editing.js') }}"></script>
+        <script>
+            getMarkersAndDisplay();
+            // debugger;
+            // paintMarkers(markersToPaint);
+        </script>
     </div>
-    <div id="form">
-        <span id="close-form" onclick="hideForm();">x</span>
-        <form onSubmit={handleSubmit}>
+    <div id="create-form">
+        <span class="close-form" onclick="hideForm(); clearEditLGMarkers();">
+            x</span>
+        <h1 class="form-title">Enter data for location</h1>
+        <form>
             <div>
                 <label htmlFor="name">Name:</label>
                 <input
                         type="text"
-                        id="name"
+                        id="create-form-name-input"
                         name="name"
-                        value={values.name}
-                        onChange={handleChange}
+                        value="Mickey Mouse"
                 />
             </div>
             <div>
-                <label htmlFor="email">Email:</label>
+                <label htmlFor="description">Description:</label>
                 <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={values.email}
-                        onChange={handleChange}
+                        type="text"
+                        id="create-form-desc-input"
+                        name="desc"
+                        value="i love this place"
                 />
             </div>
-            <button type="submit">Submit</button>
+            <div>
+                <label htmlFor="tag">Tag:</label>
+                <input
+                        type="text"
+                        id="create-form-tag-input"
+                        name="tag"
+                        value="faves"
+                />
+            </div>
+            <button type="submit" id="close-form-button"
+                    onclick="submitMarker();">Submit
+            </button>
         </form>
     </div>
 </body>
