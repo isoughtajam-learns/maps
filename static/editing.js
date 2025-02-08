@@ -6,7 +6,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 let editLayerGroup = L.layerGroup().addTo(map);
-let layerGroups = [];
+let overlayMaps = {};
 
 function displayForm() {
     /*
@@ -38,21 +38,13 @@ function clearEditLGMarkers() {
 }
 
 /*
-    Create a layer group with a marker
-    Add a click event listener to the "close-form" button to remove the layer
+    Create a marker with given lat long and add to
+      dedicated edit Layer Group.
+    Return the marker's unique id
  */
 function createEditLayerWithMarker(latlng) {
-    // let editing = L.layerGroup().addTo(map);
-    // let marker = L.marker(latlng).addTo(editing);
-    let marker2 = L.marker(latlng).addTo(editLayerGroup);
-    let marker_id = L.stamp(marker2);
-    // document.getElementById('close-form-button').addEventListener('click',
-    //     function (event) {
-    //         event.preventDefault();
-    //         editing.remove();
-    //         editLayerGroup.remove();
-    //         console.log('tried to remove edit layer group just now')
-    //     });
+    let marker = L.marker(latlng).addTo(editLayerGroup);
+    let marker_id = L.stamp(marker);
     return marker_id;
 }
 
@@ -127,10 +119,18 @@ function getMarkersAndDisplay() {
                 in layerGroups
              */
             console.log('Got markers ', data);
-            data.forEach((element) => {
+            let groupNames = Object.keys(data);
+            // debugger;
+            groupNames.forEach((groupName) => {
                 let lg = L.layerGroup().addTo(map);
-                let marker = L.marker([element.lat, element.lng]).addTo(lg);
+                data[groupName].forEach((item) => {
+                    let marker = L.marker([item.lat, item.lng]).addTo(lg);
+                });
+                overlayMaps[groupName] = lg;
             });
+            if (Object.keys(overlayMaps).length !== 0) {
+                let layerControl = L.control.layers([], overlayMaps).addTo(map);
+            }
             // debugger;
         })
         .catch(error => {
