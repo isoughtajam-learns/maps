@@ -63,9 +63,9 @@ Form button functionality
 function submitMarker(e) {
     // grab data from the form
     const jsonData = {
-        name: document.getElementById('create-form-name-input').value,
+        title: document.getElementById('create-form-title-input').value,
         desc: document.getElementById('create-form-desc-input').value,
-        tag: document.getElementById('create-form-tag-input').value,
+        layer: document.getElementById('create-form-layer-input').value,
         lat: editLayerGroup.getLayers()[0].getLatLng().lat,
         lng: editLayerGroup.getLayers()[0].getLatLng().lng
     };
@@ -125,6 +125,10 @@ function getMarkersAndDisplay() {
                 let lg = L.layerGroup().addTo(map);
                 data[groupName].forEach((item) => {
                     let marker = L.marker([item.lat, item.lng]).addTo(lg);
+                    marker.bindPopup("<div class='popup'><h4" +
+                        " class='popupTitle'>" + item.title + "</h4><p" +
+                        " class='popupDescription'>" + item.desc + "</p><h6" +
+                        " class='layer'>" + item.layer + "</h6></div>");
                 });
                 overlayMaps[groupName] = lg;
             });
@@ -136,12 +140,4 @@ function getMarkersAndDisplay() {
         .catch(error => {
             console.error('pin fetch error:', error);
         })
-}
-
-function paintMarkers(markers) {
-    if (markers != null) {
-        markers.forEach((item) => {
-            console.log(item)
-        });
-    }
 }

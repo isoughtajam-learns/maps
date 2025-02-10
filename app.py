@@ -1,7 +1,7 @@
 import json
 from collections import defaultdict
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
@@ -33,9 +33,9 @@ def post_pin():
         try:
             data = json.loads(request.data.decode('utf-8'))
             print('Received {} from maps UI'.format(data))
-            temp_pins[data.get('tag')].append(data)
+            temp_pins[data.get('layer')].append(data)
             print('temp_pins: {}'.format(temp_pins))
             error = None
         except Exception as e:
             error=error
-    return temp_pins
+    return redirect("/")

@@ -23,8 +23,3 @@
 input, button {
     margin-top: 10px;
 }
-
-#close-form-button {
-    position: relative;
-    float: right;
-}
