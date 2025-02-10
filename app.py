@@ -12,7 +12,7 @@ def index():
     return render_template('index.html')
 
 
-@app.get("/pins/")
+@app.get("/pins")
 def get_pins():
     """
     Retrieve default set of pins to load a map
@@ -22,7 +22,7 @@ def get_pins():
     return temp_pins
 
 
-@app.post("/pin/")
+@app.post("/pin")
 def post_pin():
     """
     accept details of a pin from request and write to storage

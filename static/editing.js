@@ -80,7 +80,7 @@ function submitMarker(e) {
     };
 
     // Make the fetch request with the provided options
-    fetch('/pin/', options)
+    fetch('/pin', options)
         .then(response => {
             // Check if the request was successful
             if (!response.ok) {
@@ -106,7 +106,7 @@ function getMarkersAndDisplay() {
             'Content-Type': 'application/json'
         }
     }
-    fetch('/pins/', options)
+    fetch('/pins', options)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
