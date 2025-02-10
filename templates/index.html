@@ -8,6 +8,8 @@
           href="{{ url_for('static', filename='style.css') }}" />
     <link rel="stylesheet"
           href="{{ url_for('static', filename='skeleton.css') }}" />
+    <link rel="shortcut icon"
+          href="{{ url_for('static', filename='favicon-32x32.png') }}">
      <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -31,7 +33,7 @@
                         type="text"
                         id="create-form-title-input"
                         name="title"
-                        value="Mickey Mouse"
+                        placeholder="Fox Theater"
                 />
             </div>
             <div>
@@ -40,8 +42,8 @@
                 <textarea
                         id="create-form-desc-input"
                         name="desc"
-                        value="i love this place"
                         class="u-full-width"
+                        placeholder="The Fox Theater is the best live music venue in the East Bay."
                 ></textarea>
             </div>
             <div>

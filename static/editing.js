@@ -1,4 +1,4 @@
-const originalMapCenter = [37.923, -121.921]
+const originalMapCenter = [37.80822410973752, -122.27024219885426]
 let map = L.map('map').setView(originalMapCenter, 13);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
