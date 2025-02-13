@@ -27,3 +27,9 @@ input, button {
 .leaflet-control-layers-overlays {
     font-size: small;
 }
+
+#markdown-preview-divider {
+    border-top-color: dimgray;
+    margin-bottom: 5px;
+    padding-bottom: 0;
+}

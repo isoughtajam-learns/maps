@@ -14,6 +14,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
+    <script src="{{ url_for('static', filename='markdown.js') }}"></script>
 </head>
 <body>
     <div id="map">
@@ -26,7 +27,7 @@
         <span class="close-form" onclick="hideForm(); clearEditLGMarkers();">
             x</span>
         <h1 class="form-title">Enter data for location</h1>
-        <form method="POST" onsubmit="submitMarker();" action="/pin">
+        <form method="POST" onsubmit="submitMarker();" action="/pin" enctype="multipart/form-data">
             <div class="row">
                 <label htmlFor="title">Title:</label>
                 <input
@@ -41,6 +42,7 @@
                     :</label>
                 <textarea
                         id="create-form-desc-input"
+                        oninput="this.editor.update()"
                         name="desc"
                         class="u-full-width"
                         placeholder="The Fox Theater is the best live music venue in the East Bay."
@@ -58,6 +60,20 @@
             <button type="submit" id="close-form-button"
                     class="button-primary">Map it.</button>
         </form>
+        <hr id="markdown-preview-divider">
+        <h6 id="markdown-preview-title">Description preview:</h6>
+        <div id="preview"> </div>
+        <script>
+            function Editor(input, preview) {
+                this.update = function () {
+                    preview.innerHTML = markdown.toHTML(input.value);
+                };
+                input.editor = this;
+                this.update();
+            }
+            var $ = function (id) { return document.getElementById(id); };
+            new Editor($("create-form-desc-input"), $("preview"));
+        </script>
     </div>
 </body>
 </html>

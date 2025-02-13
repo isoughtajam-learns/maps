@@ -127,7 +127,7 @@ function getMarkersAndDisplay() {
                     let marker = L.marker([item.lat, item.lng]).addTo(lg);
                     marker.bindPopup("<div class='popup'><h4" +
                         " class='popupTitle'>" + item.title + "</h4><p" +
-                        " class='popupDescription'>" + item.desc + "</p><h6" +
+                        " class='popupDescription'>" + markdown.toHTML(item.desc) + "</p><h6" +
                         " class='layer'>" + item.layer + "</h6></div>");
                 });
                 overlayMaps[groupName] = lg;
