@@ -24,10 +24,12 @@
         </script>
     </div>
     <div id="create-form">
-        <span class="close-form" onclick="hideForm(); clearEditLGMarkers();">
+        <span class="close-form" onclick="hideForm(event);
+        clearEditLGMarkers(event);">
             x</span>
         <h1 class="form-title">Enter data for location</h1>
-        <form method="POST" onsubmit="submitMarker();" action="/pin" enctype="multipart/form-data">
+        <form method="POST" onsubmit="submitMarker(event);" action="/pin"
+              enctype="multipart/form-data">
             <div class="row">
                 <label htmlFor="title">Title:</label>
                 <input
@@ -35,6 +37,7 @@
                         id="create-form-title-input"
                         name="title"
                         placeholder="Fox Theater"
+                        class="u-full-width"
                 />
             </div>
             <div>
@@ -48,6 +51,11 @@
                         placeholder="The Fox Theater is the best live music venue in the East Bay."
                 ></textarea>
             </div>
+            <div id="markdown-preview" class="markdown-preview">
+                <label id="markdown-preview-title">Description preview:</label>
+                <hr id="markdown-preview-divider">
+                <div id="preview"></div>
+            </div>
             <div>
                 <label htmlFor="layer">Layer:</label>
                 <input
@@ -59,10 +67,8 @@
             </div>
             <button type="submit" id="close-form-button"
                     class="button-primary">Map it.</button>
+            <div id="form-error-div"></div>
         </form>
-        <hr id="markdown-preview-divider">
-        <h6 id="markdown-preview-title">Description preview:</h6>
-        <div id="preview"> </div>
         <script>
             function Editor(input, preview) {
                 this.update = function () {
@@ -75,5 +81,8 @@
             new Editor($("create-form-desc-input"), $("preview"));
         </script>
     </div>
+<!-- <div id="attributions">
+    <a href="https://www.flaticon.com/free-icons/edit" title="edit icons">Edit icons created by Freepik - Flaticon</a>
+</div> -->
 </body>
 </html>

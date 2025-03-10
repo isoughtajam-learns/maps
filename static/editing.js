@@ -1,12 +1,45 @@
 const originalMapCenter = [37.80822410973752, -122.27024219885426]
-let map = L.map('map').setView(originalMapCenter, 13);
+let map = L.map('map', {
+    center: originalMapCenter,
+    zoom: 16
+});
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 let editLayerGroup = L.layerGroup().addTo(map);
 let overlayMaps = {};
+
+function recenterOnCurrent() {
+    let latlngs = [];
+    let lats = [];
+    let lngs = [];
+
+    Object.keys(map._layers).forEach(layerId => {
+        const layer = map._layers[layerId];
+        if ('_latlng' in layer) {
+            latlngs.push(layer._latlng);
+            lats.push(layer._latlng.lat);
+            lngs.push(layer._latlng.lng);
+        }
+    })
+    if (latlngs.length === 0) {
+        return
+    }
+
+    function sum(arr) {
+        return arr.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+    }
+
+    const center = [
+        sum(lats)/lats.length,
+        sum(lngs)/lngs.length,
+    ];
+    map.panTo(center);
+    map.fitBounds(L.latLngBounds(latlngs), maxZoom=19);
+}
 
 function displayForm() {
     /*
@@ -25,9 +58,33 @@ function hideForm() {
         Hide Form div
         Recenter map in new dimensions
      */
-    document.querySelector('#map').style.width = '100%';
     document.querySelector('#create-form').style.display = 'none';
-    // map.invalidateSize();
+    document.querySelector('#map').style.width = '100%';
+    // recenterOnCurrent();
+}
+
+function validateForm() {
+    let title = document.getElementById('create-form-title-input').value;
+    let desc = document.getElementById('create-form-desc-input').value;
+    let layer = document.getElementById('create-form-layer-input').value;
+
+    if (title === "" || desc === "" || layer === "") {
+        return [false, "All fields are required"];
+    } else {
+        return [true, ""]
+    }
+}
+
+function displayError(elementId, message) {
+    const errorElement = document.getElementById(elementId);
+    errorElement.textContent = message;
+    errorElement.style.display = 'block'; // Make the error message visible
+}
+
+function clearError(elementId) {
+    const errorElement = document.getElementById(elementId);
+    errorElement.textContent = '';
+    errorElement.style.display = 'none'; // Hide the error message
 }
 
 /*
@@ -61,7 +118,7 @@ Form button functionality
 // let btn = document.getElementById('close-form-button');
 
 function submitMarker(e) {
-    // grab data from the form
+    // grab data from the form and add lat lon
     const jsonData = {
         title: document.getElementById('create-form-title-input').value,
         desc: document.getElementById('create-form-desc-input').value,
@@ -70,7 +127,7 @@ function submitMarker(e) {
         lng: editLayerGroup.getLayers()[0].getLatLng().lng
     };
 
-    // Set up options for the fetch request
+    // Set up options for the POST fetch request
     const options = {
         method: 'POST',
         headers: {
@@ -79,24 +136,30 @@ function submitMarker(e) {
         body: JSON.stringify(jsonData) // Convert JSON data to a string and set it as the request body
     };
 
-    // Make the fetch request with the provided options
-    fetch('/pin', options)
-        .then(response => {
-            // Check if the request was successful
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            // Parse the response as JSON
-            return response.json();
-        })
-        .then(data => {
-            // Handle the JSON data
-            console.log('Wrote marker and retrieved again ', data);
-        })
-        .catch(error => {
-            // Handle any errors that occurred during the fetch
-            console.error('Fetch error:', error);
-        });
+    let [isValid, error] = validateForm();
+    if (!isValid) {
+        e.preventDefault();
+        displayError("form-error-div", error);
+    } else {
+        // Submit the POST request
+        fetch('/pin', options)
+            .then(response => {
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Parse the response as JSON
+                return response.json();
+            })
+            .then(data => {
+                // Handle the JSON data
+                console.log('Wrote marker and retrieved again ', data);
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the fetch
+                console.error('Fetch error:', error);
+            });
+    }
 }
 
 function getMarkersAndDisplay() {
@@ -120,12 +183,12 @@ function getMarkersAndDisplay() {
              */
             console.log('Got markers ', data);
             let groupNames = Object.keys(data);
-            // debugger;
             groupNames.forEach((groupName) => {
                 let lg = L.layerGroup().addTo(map);
                 data[groupName].forEach((item) => {
                     let marker = L.marker([item.lat, item.lng]).addTo(lg);
-                    marker.bindPopup("<div class='popup'><h4" +
+                    marker.bindPopup("<div id='popupControls'></div><div" +
+                        " class='popup'><h4" +
                         " class='popupTitle'>" + item.title + "</h4><p" +
                         " class='popupDescription'>" + markdown.toHTML(item.desc) + "</p><h6" +
                         " class='layer'>" + item.layer + "</h6></div>");
@@ -135,7 +198,7 @@ function getMarkersAndDisplay() {
             if (Object.keys(overlayMaps).length !== 0) {
                 let layerControl = L.control.layers([], overlayMaps).addTo(map);
             }
-            // debugger;
+            recenterOnCurrent();
         })
         .catch(error => {
             console.error('pin fetch error:', error);

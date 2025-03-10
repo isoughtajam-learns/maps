@@ -31,5 +31,18 @@ input, button {
 #markdown-preview-divider {
     border-top-color: dimgray;
     margin-bottom: 5px;
+    margin-top: 0;
     padding-bottom: 0;
+}
+
+.markdown-preview-title {
+    font-weight: normal;
+}
+
+.markdown-preview {
+    background-color: #eee;
+}
+
+#form-error-div {
+    color: #CC1A1C;
 }
