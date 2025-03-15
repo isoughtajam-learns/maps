@@ -24,12 +24,11 @@
         </script>
     </div>
     <div id="create-form">
-        <span class="close-form" onclick="hideForm(event);
-        clearEditLGMarkers(event);">
+        <span class="close-form" onclick="clearEditLGMarkers(event);
+        hideForm(event);">
             x</span>
         <h1 class="form-title">Enter data for location</h1>
-        <form method="POST" onsubmit="submitMarker(event);" action="/pin"
-              enctype="multipart/form-data">
+        <form method="POST" onsubmit="submitMarker(event);" action="/pin">
             <div class="row">
                 <label htmlFor="title">Title:</label>
                 <input
@@ -46,7 +45,7 @@
                 <textarea
                         id="create-form-desc-input"
                         oninput="this.editor.update()"
-                        name="desc"
+                        name="description"
                         class="u-full-width"
                         placeholder="The Fox Theater is the best live music venue in the East Bay."
                 ></textarea>

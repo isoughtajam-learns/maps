@@ -38,7 +38,7 @@ function recenterOnCurrent() {
         sum(lngs)/lngs.length,
     ];
     map.panTo(center);
-    map.fitBounds(L.latLngBounds(latlngs), maxZoom=19);
+    map.fitBounds(L.latLngBounds(latlngs), Zoom=19);
 }
 
 function displayForm() {
@@ -49,7 +49,6 @@ function displayForm() {
      */
     document.querySelector('#map').style.width = '60%';
     document.querySelector('#create-form').style.display = 'inline';
-    map.invalidateSize();
 }
 
 function hideForm() {
@@ -60,9 +59,12 @@ function hideForm() {
      */
     document.querySelector('#create-form').style.display = 'none';
     document.querySelector('#map').style.width = '100%';
-    // recenterOnCurrent();
+    recenterOnCurrent();
 }
 
+/*
+    Validate empty fields and also text field length.
+ */
 function validateForm() {
     let title = document.getElementById('create-form-title-input').value;
     let desc = document.getElementById('create-form-desc-input').value;
@@ -70,6 +72,8 @@ function validateForm() {
 
     if (title === "" || desc === "" || layer === "") {
         return [false, "All fields are required"];
+    } else if (desc.length > 140) {
+        return [false, "Description is capped at 140 characters."];
     } else {
         return [true, ""]
     }
@@ -113,15 +117,13 @@ function onMapClick(e) {
 map.on('click', onMapClick);
 
 /*
-Form button functionality
+    Form submit functionality
  */
-// let btn = document.getElementById('close-form-button');
-
 function submitMarker(e) {
     // grab data from the form and add lat lon
     const jsonData = {
         title: document.getElementById('create-form-title-input').value,
-        desc: document.getElementById('create-form-desc-input').value,
+        description: document.getElementById('create-form-desc-input').value,
         layer: document.getElementById('create-form-layer-input').value,
         lat: editLayerGroup.getLayers()[0].getLatLng().lat,
         lng: editLayerGroup.getLayers()[0].getLatLng().lng
@@ -131,6 +133,7 @@ function submitMarker(e) {
     const options = {
         method: 'POST',
         headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json' // Set content type to JSON
         },
         body: JSON.stringify(jsonData) // Convert JSON data to a string and set it as the request body
@@ -190,8 +193,8 @@ function getMarkersAndDisplay() {
                     marker.bindPopup("<div id='popupControls'></div><div" +
                         " class='popup'><h4" +
                         " class='popupTitle'>" + item.title + "</h4><p" +
-                        " class='popupDescription'>" + markdown.toHTML(item.desc) + "</p><h6" +
-                        " class='layer'>" + item.layer + "</h6></div>");
+                        " class='popupDescription'>" + markdown.toHTML(item.description) + "</p><h6" +
+                        " class='layer'>" + groupName + "</h6></div>");
                 });
                 overlayMaps[groupName] = lg;
             });
