@@ -123,7 +123,3 @@ def signup():
         except Exception as e:
             print('ERROR: {}', e)
     return {'token': create_token_for_user(username=username)}
-
-@app.route('/modal-test')
-def modal_test():
-    return render_template('modal-test.html')
