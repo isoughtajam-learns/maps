@@ -41,27 +41,6 @@ function recenterOnCurrent() {
     map.fitBounds(L.latLngBounds(latlngs), Zoom=19);
 }
 
-function displayForm() {
-    /*
-        Reduce width of map to make space for Form
-        Recenter map in new dimensions
-        Display Form div
-     */
-    document.querySelector('#map').style.width = '60%';
-    document.querySelector('#create-form').style.display = 'inline';
-}
-
-function hideForm() {
-    /*
-        Increase width of map to 100%
-        Hide Form div
-        Recenter map in new dimensions
-     */
-    document.querySelector('#create-form').style.display = 'none';
-    document.querySelector('#map').style.width = '100%';
-    recenterOnCurrent();
-}
-
 /*
     Validate empty fields and also text field length.
  */
@@ -112,14 +91,59 @@ function createEditLayerWithMarker(latlng) {
 function onMapClick(e) {
     displayForm();
     let marker_id = createEditLayerWithMarker(e.latlng);
-    console.log('created edit layer');
 }
 map.on('click', onMapClick);
 
+
 /*
-    Form submit functionality
+    Marker Form functionality
+
+    Includes:
+    - Form handling -- display, hide
+    - Submit marker
  */
-function submitMarker(e) {
+ function displayForm() {
+    /*
+        Reduce width of map to make space for Form
+        Recenter map in new dimensions
+        Display Form div
+     */
+    document.querySelector('#map').style.width = '60%';
+    document.querySelector('#create-form').style.display = 'block';
+//    document.querySelector('#create-form').classList.remove('hidden');
+//    elem.open()
+}
+
+function hideForm() {
+    /*
+        Increase width of map to 100%
+        Hide Form div
+        Recenter map in new dimensions
+     */
+    document.querySelector('#create-form').style.display = 'none';
+    document.querySelector('#map').style.width = '100%';
+//    document.querySelector('#create-form').classList.add('hidden');
+//    elem.close();
+    recenterOnCurrent();
+}
+
+window.addEventListener("keydown", (e) => {
+    if (e.defaultPrevented) {
+      return; // Do nothing if the event was already processed
+    }
+
+    if(e.key === "Escape") {
+        let elem = document.getElementById("create-form");
+        clearEditLGMarkers();
+        hideForm();
+    }
+})
+
+const submitMarker = document.getElementById("submitMarker");
+submitMarker.addEventListener("submit", onMarkerSubmit);
+
+function onMarkerSubmit(e) {
+    event.preventDefault();
     // grab data from the form and add lat lon
     const jsonData = {
         title: document.getElementById('create-form-title-input').value,
@@ -134,7 +158,8 @@ function submitMarker(e) {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json' // Set content type to JSON
+            'Content-Type': 'application/json', // Set content type to JSON
+            'Authorization': 'Bearer ' + localStorage.token
         },
         body: JSON.stringify(jsonData) // Convert JSON data to a string and set it as the request body
     };
@@ -157,6 +182,7 @@ function submitMarker(e) {
             .then(data => {
                 // Handle the JSON data
                 console.log('Wrote marker and retrieved again ', data);
+                document.location.href = "/"
             })
             .catch(error => {
                 // Handle any errors that occurred during the fetch
@@ -169,7 +195,8 @@ function getMarkersAndDisplay() {
     const options = {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.token
         }
     }
     fetch('/pins', options)

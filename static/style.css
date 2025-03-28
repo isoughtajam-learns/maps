@@ -1,18 +1,16 @@
 #map {
-    height: 90%;
+    height: 100%;
     width: 100%;
     position: relative;
     float: left;
-    display: inline;
+    display: block;
 }
 
 #create-form {
     height: 90%;
     width: 40%;
     top: 0;
-    position: relative;
     float: right;
-    display: none;
     padding: 15px;
 }
 
@@ -45,4 +43,8 @@ input, button {
 
 #form-error-div {
     color: #CC1A1C;
+}
+
+.hidden {
+    display: none;
 }

@@ -8,5 +8,5 @@ import psycopg2
 conn = psycopg2.connect(
     host="localhost",
     database="maps",
-    user=os.environ['DB_USERNAME'])
+    user=os.environ.get('DB_USERNAME'))
 conn.autocommit = True

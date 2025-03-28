@@ -18,66 +18,69 @@
 </head>
 <body>
     <div id="map">
+    </div>
+        <div id="create-form" class="hidden">
+            <span id="button-close"
+                  onclick="clearEditLGMarkers(event);
+            hideForm(event);">
+                x</span>
+            <h1 class="form-title">Enter data for location</h1>
+            <form method="POST" class="submitMarker" id="submitMarker">
+                <div class="row">
+                    <label htmlFor="title">Title:</label>
+                    <input
+                            type="text"
+                            id="create-form-title-input"
+                            name="title"
+                            placeholder="Fox Theater"
+                            class="u-full-width"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="description" class="u-full-width">Description
+                        :</label>
+                    <textarea
+                            id="create-form-desc-input"
+                            oninput="this.editor.update()"
+                            name="description"
+                            class="u-full-width"
+                            placeholder="The Fox Theater is the best live music venue in the East Bay."
+                    ></textarea>
+                </div>
+                <div id="markdown-preview" class="markdown-preview">
+                    <label id="markdown-preview-title">Description preview:</label>
+                    <hr id="markdown-preview-divider">
+                    <div id="preview"></div>
+                </div>
+                <div>
+                    <label htmlFor="layer">Layer:</label>
+                    <input
+                            type="text"
+                            id="create-form-layer-input"
+                            name="layer"
+                            value="faves"
+                    />
+                </div>
+                <button type="submit" id="close-form-button"
+                        class="button-primary">Map it.</button>
+                <div id="form-error-div"></div>
+            </form>
+            <script>
+                function Editor(input, preview) {
+                    this.update = function () {
+                        preview.innerHTML = markdown.toHTML(input.value);
+                    };
+                    input.editor = this;
+                    this.update();
+                }
+                var $ = function (id) { return document.getElementById(id); };
+                new Editor($("create-form-desc-input"), $("preview"));
+            </script>
+        </div>
+    <div>
         <script src="{{ url_for('static', filename='editing.js') }}"></script>
         <script>
             getMarkersAndDisplay();
-        </script>
-    </div>
-    <div id="create-form">
-        <span class="close-form" onclick="clearEditLGMarkers(event);
-        hideForm(event);">
-            x</span>
-        <h1 class="form-title">Enter data for location</h1>
-        <form method="POST" onsubmit="submitMarker(event);" action="/pin">
-            <div class="row">
-                <label htmlFor="title">Title:</label>
-                <input
-                        type="text"
-                        id="create-form-title-input"
-                        name="title"
-                        placeholder="Fox Theater"
-                        class="u-full-width"
-                />
-            </div>
-            <div>
-                <label htmlFor="description" class="u-full-width">Description
-                    :</label>
-                <textarea
-                        id="create-form-desc-input"
-                        oninput="this.editor.update()"
-                        name="description"
-                        class="u-full-width"
-                        placeholder="The Fox Theater is the best live music venue in the East Bay."
-                ></textarea>
-            </div>
-            <div id="markdown-preview" class="markdown-preview">
-                <label id="markdown-preview-title">Description preview:</label>
-                <hr id="markdown-preview-divider">
-                <div id="preview"></div>
-            </div>
-            <div>
-                <label htmlFor="layer">Layer:</label>
-                <input
-                        type="text"
-                        id="create-form-layer-input"
-                        name="layer"
-                        value="faves"
-                />
-            </div>
-            <button type="submit" id="close-form-button"
-                    class="button-primary">Map it.</button>
-            <div id="form-error-div"></div>
-        </form>
-        <script>
-            function Editor(input, preview) {
-                this.update = function () {
-                    preview.innerHTML = markdown.toHTML(input.value);
-                };
-                input.editor = this;
-                this.update();
-            }
-            var $ = function (id) { return document.getElementById(id); };
-            new Editor($("create-form-desc-input"), $("preview"));
         </script>
     </div>
 <!-- <div id="attributions">

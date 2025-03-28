@@ -4,7 +4,7 @@ Serialization and deserialization utils in support of the API
 import datetime
 from collections import defaultdict
 
-from settings import TIMESTAMP_FMT
+from maps.settings import TIMESTAMP_FMT
 
 MODIFIERS = {
     1184: lambda d: datetime.datetime.strftime(
