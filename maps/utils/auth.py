@@ -4,10 +4,12 @@ import jwt
 
 from maps.constants import USERNAME
 
-ANONYMOUS_USER = 'anonymous_user'
-SECRET = os.getenv('JWT_SECRET')
 
-def create_token_for_user(username=None):
+ANONYMOUS_USER = 'anonymous_user'
+SECRET = os.getenv('MAKEMAPS_SECRET')
+
+
+def create_token_for_user(username: str=None):
     """
     Given a username, generate a JWT token for the user
     :return:
@@ -16,10 +18,10 @@ def create_token_for_user(username=None):
         username = ANONYMOUS_USER
     return jwt.encode({"username": username}, SECRET, algorithm='HS256')
 
-def parse_token_from_auth_header(header) -> str:
+def parse_token_from_auth_header(header: str) -> str:
     """
-    Extract token string from Authorization header
-    :param header: Authorization header taken directly from API request
+    Extract token string from Auth header
+    :param header: Auth header taken directly from API request
     :return:
     """
     try:
@@ -29,10 +31,10 @@ def parse_token_from_auth_header(header) -> str:
         return None
     return token
 
-def decode_payload_from_auth_header(header) -> dict:
+def decode_payload_from_auth_header(header: str) -> dict:
     """
-    Extract payload from Authorization header
-    :param header: Authorization header taken directly from API request
+    Extract payload from Auth header
+    :param header: Auth header taken directly from API request
     :return:
     """
     return jwt.decode(
@@ -52,9 +54,9 @@ def filter_payload_from_auth_header(header: str, keys: iter) -> dict:
     return dict([(k, v) for k, v in payload.items() if k in keys])
 
 
-def append_user_to_dict_from_auth_header(header: str, some_dict: dict) -> dict:
+def add_user_to_dict_from_auth_header(header: str, some_dict: dict) -> dict:
     """
-
+    The name says it all
     :param header:
     :param some_dict:
     :return:

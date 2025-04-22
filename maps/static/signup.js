@@ -40,23 +40,23 @@ function onSignUpFormSubmit(event) {
         fetch('/signup', options)
             .then(response => {
                 // Check if the request was successful
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                // Parse the response as JSON
-                return response.json();
+                console.log(response);
+                if (response.ok) return response.json();
+                return response.json().then(response => {throw new Error(response.error)})
             })
             .then(data => {
                 // Handle the response by setting Auth headers and local storage
                 console.log('Wrote marker and retrieved again ', data);
                 if (data.token) {
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('username', data.username);
                 }
                 document.location.href = "/"
             })
             .catch(error => {
                 // Handle any errors that occurred during the fetch
-                console.error(error);
+                console.log(error);
+                displayError("form-error-div", error);
             });
     }
 }

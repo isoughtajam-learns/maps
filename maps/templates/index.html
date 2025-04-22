@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='skeleton.css') }}" />
+    <link rel="shortcut icon"
+          href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <script src="{{ url_for('static', filename='markdown.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+    <script src="{{ url_for('static', filename='utils.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div id="header">
+            <p id="welcome-user" class="header"></p>
+            <button id="logout-button" class="header hidden" onclick="localStorage.removeItem('username');localStorage.removeItem('token');
+">Log out</button>
+            <a href="/login" id="login-link" class="header">Log in.</a>
+
+        </div>
+    </header>
+    <div id="map">
+    </div>
+    <dialog id="create-form-dialog">
+        <h1 class="form-title">Enter data for location</h1>
+        <form method="POST" class="submit-marker" id="submit-marker">
+            <div class="row">
+                <span id="create-vs-edit-form" hidden>create</span>
+                <span id="create-form-lat" hidden></span>
+                <span id="create-form-lng" hidden></span>
+                <label htmlFor="title">Title:</label>
+                <input
+                        type="text"
+                        id="create-form-title-input"
+                        name="title"
+                        placeholder="Fox Theater"
+                        class="u-full-width"
+                />
+            </div>
+            <div>
+                <label htmlFor="description" class="u-full-width">Description
+                    :</label>
+                <textarea
+                        id="create-form-desc-input"
+                        oninput="this.editor.update()"
+                        name="description"
+                        class="u-full-width"
+                        placeholder="The Fox Theater is the best live music venue in the East Bay."
+                ></textarea>
+            </div>
+            <div id="markdown-preview" class="markdown-preview">
+                <label id="markdown-preview-title">Description preview:</label>
+                <hr id="markdown-preview-divider">
+                <div id="preview"></div>
+            </div>
+            <div>
+                <label htmlFor="layer">Layer:</label>
+                <input
+                        type="text"
+                        id="create-form-layer-input"
+                        name="layer"
+                        value="faves"
+                />
+            </div>
+            <button type="reset" id="cancel-form-button">Cancel</button>
+            <button type="submit" id="submit-form-button"
+                    class="button-primary">Map it.</button>
+            <div id="form-error-div"></div>
+        </form>
+        <script>
+            function Editor(input, preview) {
+                this.update = function () {
+                    preview.innerHTML = markdown.toHTML(input.value);
+                };
+                input.editor = this;
+                this.update();
+            }
+            var $ = function (id) { return document.getElementById(id); };
+            new Editor($("create-form-desc-input"), $("preview"));
+        </script>
+    </dialog>
+    <div>
+        <script src="{{ url_for('static', filename='editing.js') }}"></script>
+        <script>
+            getMarkersAndDisplay();
+        </script>
+    </div>
+    <div id="attributions" hidden>
+            <a href="https://www.flaticon.com/free-icons/edit" title="edit icons">Edit icons created by Freepik - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/trash-can" title="trash can icons">Trash can icons created by Freepik - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/bin" title="bin icons">Bin icons created by Smashicons - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/burger" title="burger icons">Burger icons created by Freepik - Flaticon</a>
+    </div>
+</body>
+</html>

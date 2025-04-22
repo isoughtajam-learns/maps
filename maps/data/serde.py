@@ -4,13 +4,8 @@ Serialization and deserialization utils in support of the API
 import datetime
 from collections import defaultdict
 
-from maps.settings import TIMESTAMP_FMT
+from ..settings import TIMESTAMP_FMT
 
-MODIFIERS = {
-    1184: lambda d: datetime.datetime.strftime(
-        d,
-        TIMESTAMP_FMT)
-}
 UPDATED_AT = 'updated_at'
 
 
@@ -42,3 +37,12 @@ def serialize_post_pin(values: dict) -> dict:
 
     values = add_updated_at_timestamp(values)
     return values
+
+
+def serialize_user(values: tuple, columns: tuple) -> dict:
+    data = dict(list(zip(
+        [c.name for c in columns],
+        values
+    )))
+    data.pop('encoded')
+    return data

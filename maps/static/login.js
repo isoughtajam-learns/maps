@@ -17,29 +17,26 @@ function onLoginFormSubmit(event) {
             'Content-Type': 'application/json' // Set content type to JSON
         },
         body: JSON.stringify(dataObject)
-        // Convert JSON data to a string and set it as the request body
     };
 
     // Submit the POST request
     fetch('/login', options)
         .then(response => {
             // Check if the request was successful
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            // Parse the response as JSON
-            return response.json();
+            if (response.ok) return response.json();
+            return response.json().then(response => {throw new Error(response.error)})
         })
         .then(data => {
             // Handle the response by setting Auth headers and local storage
             console.log('Wrote marker and retrieved again ', data);
             if (data.token) {
                 localStorage.setItem('token', data.token);
+                localStorage.setItem('username', data.username);
             }
             document.location.href = "/";
         })
         .catch(error => {
             // Handle any errors that occurred during the fetch
-            console.error(error);
+            displayError("form-error-div", error);
         });
 }

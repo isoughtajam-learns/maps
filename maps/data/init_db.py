@@ -4,7 +4,7 @@ Set up postgres with the necessary tables and fill in initial data.
 import datetime
 
 from database import conn
-from settings import TIMESTAMP_FMT
+from maps.settings import TIMESTAMP_FMT
 
 # Open a cursor to perform database operations
 cur = conn.cursor()
