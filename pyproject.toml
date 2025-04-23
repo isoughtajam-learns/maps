@@ -3,10 +3,10 @@ name = "maps"
 version = "0.1.0"
 description = "Make and save maps."
 dependencies = [
+    "PyJWT",
     "flask",
     "psycopg2",
     "bcrypt",
-    "jwt",
     "pytz",
     "waitress"
 ]
