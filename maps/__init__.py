@@ -2,6 +2,7 @@
 The main application logic as it relates to request handling is here.
 """
 import json
+import os
 from json import JSONDecodeError
 
 import bcrypt
@@ -200,4 +201,7 @@ def signup() -> Response | str:
         }, 200)
 
 if __name__ == "__main__":
+    env_var = os.environ.get('MAKEMAPS_SECRET')
+    if not env_var:
+        raise 'No secret set for auth token. Please run command "export MAKEMAPS_SECRET=<secret string of your choice>" then restart the application.'
     serve(app, host='0.0.0.0', port=5000, url_scheme='https')
