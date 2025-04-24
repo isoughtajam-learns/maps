@@ -6,9 +6,6 @@ import datetime
 from database import conn
 from maps.settings import TIMESTAMP_FMT
 
-# Open a cursor to perform database operations
-cur = conn.cursor()
-
 
 """
 Tier 1 tables are dependencies of Tier 2 tables
@@ -31,10 +28,6 @@ USERS_INIT_INSERT = """
 """
 
 
-# Execute the markers table creation sql
-cur.execute(USERS_INIT)
-
-
 # Insert data into the markers table
 USERS_INIT_DATA = {
     'username': 'joe_blogs',
@@ -42,10 +35,6 @@ USERS_INIT_DATA = {
     'bio': 'Wow! I cannot wait to publish a map.',
     'updated_at': datetime.datetime.now().strftime(TIMESTAMP_FMT)
 }
-
-cur.execute(
-    USERS_INIT_INSERT, USERS_INIT_DATA
-)
 
 
 """
@@ -74,10 +63,6 @@ MARKERS_INIT_INSERT = """
 """
 
 
-# Execute the markers table creation sql
-cur.execute(MARKERS_INIT)
-
-
 # Insert data into the markers table
 MARKERS_INIT_DATA = {
     'title': 'The Fox Theater',
@@ -90,6 +75,22 @@ MARKERS_INIT_DATA = {
 }
 
 
-cur.execute(
-    MARKERS_INIT_INSERT, MARKERS_INIT_DATA
-)
+def execute() -> None:
+    # Open a cursor to perform database operations
+    cur = conn.cursor()
+
+    # Create user table
+    cur.execute(USERS_INIT)
+
+    # Insert initial user data
+    cur.execute(
+        USERS_INIT_INSERT, USERS_INIT_DATA
+    )
+
+    # Create markers table
+    cur.execute(MARKERS_INIT)
+
+    # Insert initial marker data
+    cur.execute(
+        MARKERS_INIT_INSERT, MARKERS_INIT_DATA
+    )

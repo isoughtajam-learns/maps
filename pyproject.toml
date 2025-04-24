@@ -11,6 +11,10 @@ dependencies = [
     "waitress"
 ]
 
+[project.scripts]
+init_db = "data.init_db:execute"
+
 [build-system]
 requires = ["flit_core<4"]
 build-backend = "flit_core.buildapi"
+
