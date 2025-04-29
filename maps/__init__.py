@@ -39,12 +39,17 @@ from maps.utils.auth import (
     add_user_to_dict_from_auth_header
 )
 
+__version__ = "0.0.1"
+__description__ = "Make and save maps."
+
 """
 Start up check
 """
 env_var = os.environ.get('MAKEMAPS_SECRET')
 if not env_var:
-    raise 'No secret set for auth token. Please run command "export MAKEMAPS_SECRET=<secret string of your choice>" then restart the application.'
+    raise ('No secret set for auth token. Please run command '
+           '"export MAKEMAPS_SECRET=<secret string of your choice>" '
+           'then restart the application.')
 
 
 def create_app() -> Flask:

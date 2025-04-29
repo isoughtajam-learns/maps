@@ -1,15 +1,19 @@
 [project]
 name = "maps"
-version = "0.1.0"
-description = "Make and save maps."
+authors = [{name = "Sir Robin", email = "robin@camelot.uk"}]
+dynamic = ["version", "description"]
 dependencies = [
     "PyJWT",
     "flask",
     "psycopg2",
     "bcrypt",
     "pytz",
-    "waitress"
+    "waitress",
+    "click"
 ]
+
+[project.scripts]
+init_db = "data.init_db:execute"
 
 [build-system]
 requires = ["flit_core<4"]

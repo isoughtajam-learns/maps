@@ -3,11 +3,10 @@ Set up postgres with the necessary tables and fill in initial data.
 """
 import datetime
 
+import click
+
 from database import conn
 from maps.settings import TIMESTAMP_FMT
-
-# Open a cursor to perform database operations
-cur = conn.cursor()
 
 
 """
@@ -31,10 +30,6 @@ USERS_INIT_INSERT = """
 """
 
 
-# Execute the markers table creation sql
-cur.execute(USERS_INIT)
-
-
 # Insert data into the markers table
 USERS_INIT_DATA = {
     'username': 'joe_blogs',
@@ -42,10 +37,6 @@ USERS_INIT_DATA = {
     'bio': 'Wow! I cannot wait to publish a map.',
     'updated_at': datetime.datetime.now().strftime(TIMESTAMP_FMT)
 }
-
-cur.execute(
-    USERS_INIT_INSERT, USERS_INIT_DATA
-)
 
 
 """
@@ -74,10 +65,6 @@ MARKERS_INIT_INSERT = """
 """
 
 
-# Execute the markers table creation sql
-cur.execute(MARKERS_INIT)
-
-
 # Insert data into the markers table
 MARKERS_INIT_DATA = {
     'title': 'The Fox Theater',
@@ -90,6 +77,25 @@ MARKERS_INIT_DATA = {
 }
 
 
-cur.execute(
-    MARKERS_INIT_INSERT, MARKERS_INIT_DATA
-)
+@click.command('init-db')
+def execute() -> None:
+    # Open a cursor to perform database operations
+    cur = conn.cursor()
+
+    # Execute the markers table creation sql
+    cur.execute(USERS_INIT)
+
+    cur.execute(
+        USERS_INIT_INSERT, USERS_INIT_DATA
+    )
+
+    # Execute the markers table creation sql
+    cur.execute(MARKERS_INIT)
+
+    cur.execute(
+        MARKERS_INIT_INSERT, MARKERS_INIT_DATA
+    )
+
+
+if __name__ == '__main__':
+    execute()
