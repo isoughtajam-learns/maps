@@ -285,10 +285,18 @@ function getMarkersAndDisplay() {
                 throw new Error('Network response was not ok');
             }
             console.log(response);
+            const headers = response.headers;
+            localStorage.apiVersion = headers.get('apiVersion');
+            localStorage.tagLine = headers.get('tagLine');
+
             if (response.status === 204) return '';
             return response.json();
         })
         .then(data => {
+            /*
+            Grab apiVersion and tagLine from response header to display in the header
+            */
+            debugger;
             /*
             Add all retrieved points to a new LayerGroup with a named key
             in layerGroups
@@ -317,6 +325,12 @@ function getMarkersAndDisplay() {
                 let layerControl = L.control.layers([], overlayMaps).addTo(map);
             }
             recenterOnCurrent();
+
+            let apiVersionSpan = document.getElementById('apiVersion');
+            apiVersionSpan.innerHTML = localStorage.getItem('apiVersion');
+            let tagLineSpan = document.getElementById('tagLine');
+            tagLineSpan.innerHTML = localStorage.getItem('tagLine');
+
         })
         .catch(error => {
             console.error('pin fetch error:', error);
