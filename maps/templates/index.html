@@ -6,10 +6,15 @@
         crossorigin=""/>
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}" />
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='skeleton.css') }}" />
+<!--    <link rel="stylesheet"-->
+<!--          href="{{ url_for('static', filename='skeleton.css') }}" />-->
     <link rel="shortcut icon"
           href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link href="https://fonts.cdnfonts.com/css/futura-pt" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-pt');
+    </style>
+
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -20,17 +25,19 @@
 </head>
 <body>
     <header>
-        <div id="header">
-            <p id="welcome-user" class="header"></p>
-            <button id="logout-button" class="header hidden" onclick="localStorage.removeItem('username');localStorage.removeItem('token');
+        <div id="header row">
+            <h5 id="apiVersion" class="two columns"></h5>
+            <h5 id="tagLine" class="three columns"></h5>
+            <h6 id="welcome-user" class="six columns"></h6>
+            <button id="logout-button" class="header one column hidden" onclick="localStorage.removeItem('username');localStorage.removeItem('token');
 ">Log out</button>
-            <a href="/login" id="login-link" class="header">Log in.</a>
+            <a href="/login" id="login-link" class="header one column">Log in.</a>
 
         </div>
     </header>
     <div id="map">
     </div>
-    <dialog id="create-form-dialog">
+    <dialog id="create-form-dialog" class="animate-pulse">
         <h1 class="form-title">Enter data for location</h1>
         <form method="POST" class="submit-marker" id="submit-marker">
             <div class="row">

@@ -52,6 +52,12 @@ if not env_var:
            'then restart the application.')
 
 
+def add_custom_headers(response):
+    response.headers['apiVersion'] = __version__
+    response.headers['tagLine'] = __description__
+    return response
+
+
 def create_app() -> Flask:
     """
     Application factory that houses all routes and their definitions
@@ -71,7 +77,7 @@ def create_app() -> Flask:
         :return:
         """
         if not request.headers.get(AUTH_HEADER):
-            return make_response({}, 204)
+            return add_custom_headers(make_response({}, 204))
 
         username_dict = filter_payload_from_auth_header(
             request.headers.get(AUTH_HEADER),
@@ -81,8 +87,8 @@ def create_app() -> Flask:
         cur.execute(
             GET_MARKERS,
             username_dict)
-        return make_response(
-            serialize_get_pins(cur.fetchall()), 200)
+        return add_custom_headers(
+            make_response(serialize_get_pins(cur.fetchall()), 200))
 
     @app.get("/user")
     def get_user() -> Response:
@@ -91,7 +97,7 @@ def create_app() -> Flask:
         :return:
         """
         if not request.headers.get(AUTH_HEADER):
-            return make_response({}, 401)
+            return add_custom_headers(make_response({}, 401))
 
         username_dict = filter_payload_from_auth_header(
             request.headers.get(AUTH_HEADER),
@@ -103,8 +109,8 @@ def create_app() -> Flask:
             username_dict)
         user = cur.fetchone()
         print('USER: {}'.format(user))
-        return make_response(
-            serialize_user(user, cur.description), 200)
+        return add_custom_headers(
+            make_response(serialize_user(user, cur.description), 200))
 
     @app.route('/pin', methods=['POST', 'PATCH'])
     def post_pin() -> Response:
@@ -114,7 +120,7 @@ def create_app() -> Flask:
         """
         query = POST_MARKER
         if not request.headers.get(AUTH_HEADER):
-            return make_response({}, 204)
+            return add_custom_headers(make_response({}, 204))
         if request.method == 'PATCH':
             query = PATCH_MARKER
         try:
@@ -124,8 +130,8 @@ def create_app() -> Flask:
             cur = conn.cursor()
             cur.execute(query, serialize_post_pin(data))
         except JSONDecodeError as e:
-            return make_response({'error': e}, 400)
-        return make_response({}, 201)
+            return add_custom_headers(make_response({'error': e}, 400))
+        return add_custom_headers(make_response({}, 201))
 
     @app.delete('/pin/<int:pin_id>')
     def delete_pin(pin_id: int) -> Response:
@@ -134,7 +140,7 @@ def create_app() -> Flask:
         :return:
         """
         if not request.headers.get(AUTH_HEADER):
-            return make_response({}, 204)
+            return add_custom_headers(make_response({}, 204))
         try:
             data = filter_payload_from_auth_header(
                 request.headers.get(AUTH_HEADER), USERNAME)
@@ -142,8 +148,8 @@ def create_app() -> Flask:
             cur = conn.cursor()
             cur.execute(DELETE_MARKER, data)
         except JSONDecodeError as e:
-            return make_response({'error': e}, 400)
-        return make_response({}, 201)
+            return add_custom_headers(make_response({'error': e}, 400))
+        return add_custom_headers(make_response({}, 201))
 
     @app.route('/login', methods=['GET', 'POST'])
     def login() -> Response | str:
@@ -168,12 +174,17 @@ def create_app() -> Flask:
                 encoded = cur.fetchone()[0].tobytes()
                 assert(bcrypt.checkpw(password.encode('utf-8'), encoded))
             except Exception as e:
-                return make_response({'error': 'Password did not match our records. {}'.format(e)}, 401)
+                return add_custom_headers(
+                    make_response({
+                        'error': 'Password did not match our records. {}'.format(e)
+                    }, 401))
 
-            return make_response({
-                'token': create_token_for_user(username),
-                'username': username
-            }, 200)
+            return add_custom_headers(
+                make_response({
+                    'token': create_token_for_user(username),
+                    'username': username
+                }, 200)
+            )
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup() -> Response | str:
@@ -203,11 +214,17 @@ def create_app() -> Flask:
                 error = cur.statusmessage
                 assert('INSERT' in cur.statusmessage)
             except Exception as e:
-                return make_response({'error': 'Error creating user {}'.format(e)}, 401)
+                return add_custom_headers(
+                    make_response({
+                        'error': 'Error creating user {}'.format(e)
+                    }, 401)
+                )
 
-        return make_response({
+        return add_custom_headers(
+            make_response({
                 'token': create_token_for_user(username=username),
                 'username': username
             }, 200)
+        )
 
     return app

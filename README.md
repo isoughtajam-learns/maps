@@ -31,3 +31,10 @@
 7. install the wheel
 8. run init_db
 9. waitress-serve it up
+
+## Develop
+1. update version variable
+2. git tag release
+3. cut a new wheel
+4. scp to prod server
+5. pip upgrade
