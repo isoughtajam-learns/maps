@@ -39,12 +39,17 @@ from maps.utils.auth import (
     add_user_to_dict_from_auth_header
 )
 
+__version__ = "0.0.1"
+__description__ = "Make and save maps."
+
 """
 Start up check
 """
 env_var = os.environ.get('MAKEMAPS_SECRET')
 if not env_var:
-    raise 'No secret set for auth token. Please run command "export MAKEMAPS_SECRET=<secret string of your choice>" then restart the application.'
+    raise ('No secret set for auth token. Please run command '
+           '"export MAKEMAPS_SECRET=<secret string of your choice>" '
+           'then restart the application.')
 
 
 def create_app() -> Flask:
@@ -163,7 +168,7 @@ def create_app() -> Flask:
                 encoded = cur.fetchone()[0].tobytes()
                 assert(bcrypt.checkpw(password.encode('utf-8'), encoded))
             except Exception as e:
-                return make_response({'error': 'Password did not match our records.'}, 401)
+                return make_response({'error': 'Password did not match our records. {}'.format(e)}, 401)
 
             return make_response({
                 'token': create_token_for_user(username),
@@ -198,7 +203,7 @@ def create_app() -> Flask:
                 error = cur.statusmessage
                 assert('INSERT' in cur.statusmessage)
             except Exception as e:
-                return make_response({'error': 'Error creating user {}'.format(error)}, 401)
+                return make_response({'error': 'Error creating user {}'.format(e)}, 401)
 
         return make_response({
                 'token': create_token_for_user(username=username),

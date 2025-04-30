@@ -3,6 +3,8 @@ Set up postgres with the necessary tables and fill in initial data.
 """
 import datetime
 
+import click
+
 from database import conn
 from maps.settings import TIMESTAMP_FMT
 
@@ -75,6 +77,7 @@ MARKERS_INIT_DATA = {
 }
 
 
+@click.command('init-db')
 def execute() -> None:
     # Open a cursor to perform database operations
     cur = conn.cursor()
@@ -94,3 +97,5 @@ def execute() -> None:
     cur.execute(
         MARKERS_INIT_INSERT, MARKERS_INIT_DATA
     )
+if __name__ == '__main__':
+    execute()
