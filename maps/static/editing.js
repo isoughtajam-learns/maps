@@ -285,6 +285,9 @@ function getMarkersAndDisplay() {
                 throw new Error('Network response was not ok');
             }
             console.log(response);
+            /*
+            Grab apiVersion and tagLine from response header to save in localstorage
+            */
             const headers = response.headers;
             localStorage.apiVersion = headers.get('apiVersion');
             localStorage.tagLine = headers.get('tagLine');
@@ -293,10 +296,6 @@ function getMarkersAndDisplay() {
             return response.json();
         })
         .then(data => {
-            /*
-            Grab apiVersion and tagLine from response header to display in the header
-            */
-            debugger;
             /*
             Add all retrieved points to a new LayerGroup with a named key
             in layerGroups
