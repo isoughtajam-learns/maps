@@ -56,10 +56,6 @@ input, button {
     background-color: #eee;
 }
 
-#form-error-div {
-    color: #CC1A1C;
-}
-
 .hidden {
     display: none;
 }

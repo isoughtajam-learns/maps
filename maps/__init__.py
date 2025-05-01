@@ -67,7 +67,6 @@ def create_app() -> Flask:
 
     @app.route("/")
     def index() -> str:
-        print('requested /')
         return render_template('index.html')
 
     @app.get("/pins")
@@ -227,4 +226,9 @@ def create_app() -> Flask:
             }, 200)
         )
 
+    @app.route('/palette')
+    def palette() -> str:
+        return render_template('palette.html')
+
     return app
+
