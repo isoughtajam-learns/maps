@@ -63,7 +63,7 @@ def create_app() -> Flask:
     Application factory that houses all routes and their definitions
     :return:
     """
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, template_folder='templates')
 
     @app.route("/")
     def index() -> str:

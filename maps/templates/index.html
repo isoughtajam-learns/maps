@@ -26,17 +26,7 @@
 
 </head>
 <body class="bg-stone-100">
-    <header>
-        <div id="header row">
-            <h5 id="apiVersion" class="two columns"></h5>
-            <h5 id="tagLine" class="three columns"></h5>
-            <h6 id="welcome-user" class="six columns"></h6>
-            <button id="logout-button" class="header one column hidden" onclick="localStorage.removeItem('username');localStorage.removeItem('token');
-">Log out</button>
-            <a href="/login" id="login-link" class="header one column">Log in.</a>
-
-        </div>
-    </header>
+    {% block header %} {% endblock %}
     <div id="map">
     </div>
     <dialog id="create-form-dialog" class="animate-pulse">
