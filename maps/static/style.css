@@ -10,6 +10,7 @@ body, html {
     position: relative;
 }
 
+/*
 #header {
     z-index: 100;
     height: 50px;
@@ -20,7 +21,7 @@ body, html {
     display: inline;
     margin: 5px;
 }
-
+*/
 #create-form {
     height: 90%;
     width: 40%;

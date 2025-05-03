@@ -1,32 +1,15 @@
-<!doctype html>
-<html>
-<head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-        crossorigin=""/>
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}" />
-<!--    <link rel="stylesheet"-->
-<!--          href="{{ url_for('static', filename='skeleton.css') }}" />-->
-    <link rel="shortcut icon"
-          href="{{ url_for('static', filename='favicon-32x32.png') }}">
-    <link href="https://fonts.cdnfonts.com/css/futura-pt" rel="stylesheet">
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/futura-pt');
-    </style>
-
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
-    <script src="{{ url_for('static', filename='markdown.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
-    <script src="{{ url_for('static', filename='utils.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-</head>
-<body class="bg-stone-100">
-    {% block header %} {% endblock %}
+{% extends 'base.html' %}
+{% block header %}
+    <div id="header row">
+        <span class="inline-block ml-3 my-auto align-baseline text-xl" id="tagLine"></span>
+        <span class="inline-block mr-3 my-auto align-baseline text-xs" id="apiVersion"></span>
+        <span class="inline-block mx-3 my-auto align-middle text-lg" id="welcome-user"></span>
+        <button id="logout-button" class="inline-block shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white  font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="localStorage.removeItem('username');localStorage.removeItem('token');">Log Out</button>
+        <button id="login-link" class="inline-block shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white  font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="window.location.href='/login'">Log In</button>
+<!--            <a href="/login" id="login-link" class="header one column">Log in.</a>-->
+    </div>
+{% endblock %}
+{% block container %}
     <div id="map">
     </div>
     <dialog id="create-form-dialog" class="animate-pulse">
@@ -99,5 +82,4 @@
             <a href="https://www.flaticon.com/free-icons/bin" title="bin icons">Bin icons created by Smashicons - Flaticon</a>
             <a href="https://www.flaticon.com/free-icons/burger" title="burger icons">Burger icons created by Freepik - Flaticon</a>
     </div>
-</body>
-</html>
+{% endblock %}

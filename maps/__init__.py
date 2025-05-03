@@ -63,7 +63,7 @@ def create_app() -> Flask:
     Application factory that houses all routes and their definitions
     :return:
     """
-    app = Flask(__name__, instance_relative_config=True, template_folder='templates')
+    app = Flask(__name__, instance_relative_config=True)
 
     @app.route("/")
     def index() -> str:
@@ -162,7 +162,7 @@ def create_app() -> Flask:
         Does not require Authorization header.
         """
         if request.method == 'GET':
-            return render_template('login.html')
+            return render_template('index.html')
         else:
             try:
                 data = json.loads(request.data.decode('utf-8'))
