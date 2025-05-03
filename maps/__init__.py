@@ -162,7 +162,7 @@ def create_app() -> Flask:
         Does not require Authorization header.
         """
         if request.method == 'GET':
-            return render_template('index.html')
+            return render_template('login.html')
         else:
             try:
                 data = json.loads(request.data.decode('utf-8'))
