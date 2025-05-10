@@ -39,7 +39,7 @@ from maps.utils.auth import (
     add_user_to_dict_from_auth_header
 )
 
-__version__ = "0.0.1"
+__version__ = "0.1.1"
 __description__ = "Make and save maps."
 
 """
