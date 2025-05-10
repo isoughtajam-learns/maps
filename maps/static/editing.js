@@ -32,7 +32,6 @@ if (username != null) {
     logoutButton.classList.remove('hidden')
     loginLink.classList.add('hidden')
 } else {
-    greeting.innerHTML = "In order to save selections, please...";
     logoutButton.classList.add('hidden')
     loginLink.classList.remove('hidden')
 }
@@ -116,8 +115,9 @@ function onMapClick(e) {
     dialog.showModal();
     let marker = L.marker(e.latlng)
     let marker_id = L.stamp(marker);
-    document.getElementById('create-form-lat').value = e.latlng.lat
-    document.getElementById('create-form-lng').value = e.latlng.lng
+    document.getElementById('create-form-dialog').setAttribute('data-form-status', 'create');
+    document.getElementById('create-form-dialog').setAttribute('data-lat', e.latlng.lat);
+    document.getElementById('create-form-dialog').setAttribute('data-lng', e.latlng.lng);
 }
 map.on('click', onMapClick);
 
@@ -130,12 +130,13 @@ map.on('click', onMapClick);
     - Submit marker
  */
 function resetCreateForm() {
-    document.getElementById('create-vs-edit-form').textContent = 'create';
+    document.getElementById('create-form-dialog').setAttribute('data-form-status', 'create');
+    document.getElementById('create-form-dialog').setAttribute('data-lat', '');
+    document.getElementById('create-form-dialog').setAttribute('data-lng', '');
     document.getElementById('create-form-title-input').textContent = '';
     document.getElementById('create-form-desc-input').textContent = '';
     document.getElementById('create-form-layer-input').textContent = 'faves';
-    document.getElementById('create-form-lat').value = '';
-    document.getElementById('create-form-lng').value = '';
+    document.getElementById('preview').textContent = '';
 }
 
 function hideDialog() {
@@ -145,7 +146,7 @@ function hideDialog() {
         Recenter map in new dimensions
      */
     const dialog = document.getElementById("create-form-dialog");
-    const keepMarker = document.getElementById('create-vs-edit-form').textContent == 'edit'
+    const keepMarker = document.getElementById('create-form-dialog').getAttribute('data-form-status') == 'edit';
     clearEditLGMarkers();
     recenterOnCurrent();
     dialog.close();
@@ -171,14 +172,15 @@ function onMarkerSubmit(e) {
         title: document.getElementById('create-form-title-input').value,
         description: document.getElementById('create-form-desc-input').value,
         layer: document.getElementById('create-form-layer-input').value,
-        lat: document.getElementById('create-form-lat').value,
-        lng: document.getElementById('create-form-lng').value,
+        lat: document.getElementById('create-form-dialog').getAttribute('data-lat'),
+        lng: document.getElementById('create-form-dialog').getAttribute('data-lng'),
     };
     // If we're editing an existing marker, handle differently
-    const createOrEdit = document.getElementById('create-vs-edit-form').textContent;
-    const markerId = document.getElementById('popup');
+    const dialog = document.getElementById('create-form-dialog');
+    const createOrEdit = dialog.getAttribute('data-form-status');
+    const markerId = document.getElementById('create-form-dialog').getAttribute('data-marker-id');
     if (markerId !== null) {
-        jsonData['id'] = parseInt(markerId.getAttribute('data-marker-id'));
+        jsonData['id'] = markerId;
     }
 
 
@@ -188,7 +190,7 @@ function onMarkerSubmit(e) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json', // Set content type to JSON
-            'Authorization': 'Bearer ' + localStorage.token
+            'Authorization': localStorage.token != null ? 'Bearer ' + localStorage.token : ''
         },
         body: JSON.stringify(jsonData) // Convert JSON data to a string and set it as the request body
     };
@@ -303,17 +305,20 @@ function getMarkersAndDisplay() {
             console.log('Got markers ', data);
             const mdConverter = new showdown.Converter();
             let groupNames = Object.keys(data);
+            const popupTemplate = document.getElementById('popup')
             groupNames.forEach((groupName) => {
                 let lg = L.layerGroup().addTo(map);
                 data[groupName].forEach((item) => {
                     let marker = L.marker([item.lat, item.lng]).addTo(lg);
-                    marker.bindPopup("<div class='popup' id='popup' data-marker-id='" + item.id + "'>" +
-                        "<h4 class='popup-title'>" + item.title + "</h4>" +
-                        "<div class='popup-description'>" + mdConverter.makeHtml(item.description) + "</div>" +
-                        "<div id='popup-footer'><h6 class='popup-layer popup-footer'>" + groupName + "</h6>" +
-                        "<img onclick='editDialog();' id='edit-control' class='popup-controls popup-footer edit-control' src='/static/pencil.png' height='10' width='10')>" +
-                        "<img onclick='deleteMarker();' id='delete-control' class='popup-controls popup-footer delete-control' src='/static/trash-bin-green.png' height='10' width='10')>" +
-                        "</div></div>");
+                    let popup = popupTemplate.cloneNode(true);
+                    popup.setAttribute('data-marker-id', item.id);
+                    popup.children[0].innerHTML = item.title;
+                    popup.children[1].innerHTML = item.description;
+                    popup.children[2].children[0].innerHTML = groupName;
+                    popup.children[3].innerHTML = item.id;
+                    popup.children[4].innerHTML = item.lat;
+                    popup.children[5].innerHTML = item.lng;
+                    marker.bindPopup(popup.innerHTML);
                 });
                 overlayMaps[groupName] = lg;
             });
@@ -341,14 +346,13 @@ Edit dialog function
 */
 function editDialog() {
     // get marker to get latlng and update form lat lng fields
-    const lat = document.getElementById('create-form-lat').value
-    const lng = document.getElementById('create-form-lng').value
 
     // Find initial state
+    let dialog = document.getElementById("create-form-dialog");
     let title = null;
     let descDiv = null;
     let layer = null;
-    const mdConverter = new showdown.Converter();
+    let mdConverter = new showdown.Converter();
 
     const titleNodes = document.getElementsByClassName('popup-title');
     if (titleNodes) {
@@ -362,17 +366,19 @@ function editDialog() {
     if (layerNodes) {
         layer = layerNodes[0];
     }
+    dialog.setAttribute('data-marker-id', document.getElementById('popup-marker-id').innerHTML);
+    dialog.setAttribute('data-lat', document.getElementById('popup-lat').innerHTML);
+    dialog.setAttribute('data-lng', document.getElementById('popup-lng').innerHTML);
+
     // Set state of create form to match
     let formTitle = document.getElementById('create-form-title-input');
     formTitle.value = title.innerHTML;
     let formDesc = document.getElementById('create-form-desc-input');
-    formDesc.innerHTML = mdConverter.makeMarkdown(descDiv.innerHTML);
+    formDesc.value = mdConverter.makeMarkdown(descDiv.innerHTML);
     let formLayer = document.getElementById('create-form-layer-input');
     formLayer.value = layer.textContent;
-    let formType = document.getElementById('create-vs-edit-form')
-    formType.textContent = 'edit';
+    document.getElementById('create-form-dialog').setAttribute('data-form-status', 'edit');
     // Pop that thang open
-    const dialog = document.getElementById("create-form-dialog");
     dialog.showModal();
 }
 

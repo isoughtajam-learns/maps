@@ -3,24 +3,45 @@
         <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon-32x32.png') }}">
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body class="bg-stone-50 text-zinc-800 p-5">
-    <div class="container bg-stone-50 m-5">
-        <div class="bg-stone-100 h-15 p-2 align-middle row mb-2" id="header">
-            <span class="inline-block ml-3 my-auto align-baseline text-xl" id="tagLine">Make and save maps.</span>
-            <span class="inline-block mr-3 my-auto align-baseline text-xs" id="apiVersion">v0.0.1</span>
-            <span class="inline-block mx-3 my-auto align-middle text-lg" id="greeting">Welcome, gautam!</span>
-            <button id="log-out" class="shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white  font-bold py-2 px-4 rounded align-middle mx-2 float-right">Log out</button>
+    <body class="bg-stone-50 text-zinc-800 p-2">
+        <div class="flex flex-col min-h-screen">
+            <header class="bg-stone-100 py-2" id="header">
+                <a class="inline-block ml-3 my-auto align-baseline text-2xl" id="tagLine" href="">Make and save maps.</a>
+                <span class="inline-block mr-3 my-auto align-baseline text-xs" id="apiVersion">v0.0.1</span>
+                <span class="inline-block mx-3 my-auto align-middle text-lg p-1 border-b-2 border-dashed border-amber-300" id="welcome-user">Welcome, gautam!</span>
+                <button id="log-out" class="shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white  font-bold py-2 px-4 rounded align-middle mx-2 float-right">Log out</button>
 
+            </header>
+            <div class="flex flex-col md:flex-row flex-grow mb-2" id="container">
+                <main id="main" class="flex-grow p-4 order-2 md:order-1 bg-neutral-200">
+                    <p>paragraph</p>
+                    <h1>Header 1</h1>
+                    <h2>Header 2</h2>
+                    <h3>Header 3</h3>
+                    <h4>Header 4</h4>
+                    <h5>Header 5</h5>
+                    <h6>Header 6</h6>
+                </main>
+                <aside class="w-full md:w-84 p-4 bg-neutral-300 order-1 md:order-2 ml-2 divide-y-1 divide-dashed divide-sky-500">
+                    <div class="map-comment py-2">
+                        <p class="map-comment-username text-md">Joe Blogs</p>
+                        <p class="map-comment-text text-xs">Any recommendations on what to do in town for a day trip with kids?</p>
+                        <p class="map-comment-timestamp text-xs text-zinc-500 italic">May 4 19:04:55 UTC</p>
+                    </div>
+                    <div class="map-comment py-2">
+                        <p class="map-comment-username text-md">gautam</p>
+                        <p class="map-comment-text text-xs">Check out the park near downtown, great playground and a good restaurant with a patio right next door.</p>
+                        <p class="map-comment-timestamp text-xs text-zinc-500 italic">May 4 20:43:15 UTC</p>
+                    </div>
+                </aside>
+            </div>
+            <footer class="bg-slate-400 p-4 mb-2 divide-x-1 divide-dashed">
+                <span class="inline px-2" id="copyright">© Copyright 2025, Gautam Joshi</span>
+                <a href="" class="inline px-2" id="footer-read-this">Read this</a>
+                <a href="" class="inline px-2" id="footer-head-this">Hear this</a>
+                <a href="" class="inline px-2" id="footer-then-do-this">Then do this</a>
+                <a href="" class="inline px-2" id="footer-support">Please support us</a>
+            </footer>
         </div>
-        <div id="main" class="bg-neutral-200">
-            <p>paragraph</p>
-            <h1>Header 1</h1>
-            <h2>Header 2</h2>
-            <h3>Header 3</h3>
-            <h4>Header 4</h4>
-            <h5>Header 5</h5>
-            <h6>Header 6</h6>
-        </div>
-    </div>
-</body>
+    </body>
 </html>

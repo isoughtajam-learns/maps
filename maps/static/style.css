@@ -4,24 +4,11 @@ body, html {
 }
 
 #map {
-    height: calc(100% - 50px);
+    height: 100%;
     width: 100%;
     display: block;
-    position: relative;
 }
 
-/*
-#header {
-    z-index: 100;
-    height: 50px;
-    width: 100%;
-}
-
-.header {
-    display: inline;
-    margin: 5px;
-}
-*/
 #create-form {
     height: 90%;
     width: 40%;
@@ -34,27 +21,8 @@ body, html {
     font-size: 24px;
 }
 
-input, button {
-    margin-top: 10px;
-}
-
 .leaflet-control-layers-overlays {
     font-size: small;
-}
-
-#markdown-preview-divider {
-    border-top-color: dimgray;
-    margin-bottom: 5px;
-    margin-top: 0;
-    padding-bottom: 0;
-}
-
-.markdown-preview-title {
-    font-weight: normal;
-}
-
-.markdown-preview {
-    background-color: #eee;
 }
 
 .hidden {
@@ -74,4 +42,13 @@ dialog::backdrop {
 .popup-controls {
     padding-right: 5px;
     float: right;
+}
+
+input, textarea {
+    outline: none;
+    border: none;
+}
+
+#preview {
+    overflow-wrap: break-word;
 }

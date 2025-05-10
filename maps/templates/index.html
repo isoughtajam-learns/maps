@@ -1,80 +1,102 @@
 {% extends 'base.html' %}
 {% block header %}
     <div id="header row">
-        <span class="inline-block ml-3 my-auto align-baseline text-xl" id="tagLine"></span>
+        <a href="/"><span class="inline-block ml-3 my-auto align-baseline text-2xl" id="tagLine">
+        </span></a>
         <span class="inline-block mr-3 my-auto align-baseline text-xs" id="apiVersion"></span>
-        <span class="inline-block mx-3 my-auto align-middle text-lg" id="welcome-user"></span>
-        <button id="logout-button" class="inline-block shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white  font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="localStorage.removeItem('username');localStorage.removeItem('token');">Log Out</button>
-        <button id="login-link" class="inline-block shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white  font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="window.location.href='/login'">Log In</button>
-<!--            <a href="/login" id="login-link" class="header one column">Log in.</a>-->
+        <span class="inline-block mx-3 my-auto align-baseline text-lg" id="welcome-user"></span>
+        <button id="logout-button" class="inline-block shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="localStorage.removeItem('username');localStorage.removeItem('token');">Log Out</button>
+        <button id="login-link" class="shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="window.location.href='/login'">Log In</button>
     </div>
 {% endblock %}
 {% block container %}
-    <div id="map">
-    </div>
-    <dialog id="create-form-dialog" class="animate-pulse">
-        <h1 class="form-title">Enter data for location</h1>
-        <form method="POST" class="submit-marker" id="submit-marker">
-            <div class="row">
-                <span id="create-vs-edit-form" hidden>create</span>
-                <span id="create-form-lat" hidden></span>
-                <span id="create-form-lng" hidden></span>
-                <label htmlFor="title">Title:</label>
-                <input
-                        type="text"
-                        id="create-form-title-input"
-                        name="title"
-                        placeholder="Fox Theater"
-                        class="u-full-width"
-                />
-            </div>
-            <div>
-                <label htmlFor="description" class="u-full-width">Description
-                    :</label>
-                <textarea
-                        id="create-form-desc-input"
-                        oninput="this.editor.update()"
-                        name="description"
-                        class="u-full-width"
-                        placeholder="The Fox Theater is the best live music venue in the East Bay."
-                ></textarea>
-            </div>
-            <div id="markdown-preview" class="markdown-preview">
-                <label id="markdown-preview-title">Description preview:</label>
-                <hr id="markdown-preview-divider">
-                <div id="preview"></div>
-            </div>
-            <div>
-                <label htmlFor="layer">Layer:</label>
-                <input
-                        type="text"
-                        id="create-form-layer-input"
-                        name="layer"
-                        value="faves"
-                />
-            </div>
-            <button type="reset" id="cancel-form-button">Cancel</button>
-            <button type="submit" id="submit-form-button"
-                    class="button-primary">Map it.</button>
-            <div id="form-error-div"></div>
-        </form>
-        <script>
-            function Editor(input, preview) {
-                this.update = function () {
-                    preview.innerHTML = markdown.toHTML(input.value);
-                };
-                input.editor = this;
-                this.update();
-            }
-            var $ = function (id) { return document.getElementById(id); };
-            new Editor($("create-form-desc-input"), $("preview"));
-        </script>
+    <main id="main" class="flex-grow p-1 order-2 md:order-1 bg-neutral-200">
+        <div id="map">
+        </div>
+    </main>
+    <dialog id="create-form-dialog"
+            data-form-status="create"
+            data-lat=""
+            data-lng=""
+            data-marker-id=""
+            class="m-auto p-5 border-2 border-dashed border-slate-600 backdrop:bg-gray-50 shadow-xl hs-overlay hs-overlay-open:opacity-100">
+        <div class="w-85 flex-1">
+            <h1 class="form-title border-none">Enter data for location</h1>
+            <form method="POST" class="submit-marker" id="submit-marker">
+                <div class="row my-5">
+                    <span id="create-form-lat" hidden></span>
+                    <span id="create-form-lng" hidden></span>
+                    <label htmlFor="title" class="pt-2 px-2 block">Title</label>
+                    <input
+                            type="text"
+                            id="create-form-title-input"
+                            name="title"
+                            placeholder="Fox Theater"
+                            class="p-2 bg-gray-200 text-pretty w-full"
+                    />
+                </div>
+                <div class="my-5">
+                    <label htmlFor="description" class="pt-2 px-2 block">Description</label>
+                    <textarea
+                            id="create-form-desc-input"
+                            oninput="this.editor.update()"
+                            onload="this.editor.update()"
+                            name="description"
+                            class="p-2 bg-gray-200 w-full h-48 text-wrap align-top"
+                            placeholder="The Fox Theater is the best live music venue in the East Bay."
+                            spellcheck="true"
+                    ></textarea>
+                </div>
+                <div id="markdown-preview" class="markdown-preview my-5">
+                    <label id="markdown-preview-title" class="pt-2 px-2 block">Description preview</label>
+                    <div id="preview" class="p-2 bg-neutral-200 border-2 border-dashed border-slate-600 text-pretty"></div>
+                </div>
+                <div class="my-5">
+                    <label htmlFor="layer" class="block p-2">Layer</label>
+                    <input
+                            type="text"
+                            id="create-form-layer-input"
+                            name="layer"
+                            value="faves"
+                            class="p-2 bg-neutral-200 "
+                    />
+                </div>
+                <button type="reset" id="cancel-form-button"
+                    class="float-left shadow-md my-auto mx-3 bg-gray-300 hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Cancel</button>
+                <button type="submit" id="submit-form-button"
+                    class="float-right shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Map it.</button>
+                <div id="form-error-div"></div>
+            </form>
+            <script>
+                function Editor(input, preview) {
+                    this.update = function () {
+                        preview.innerHTML = markdown.toHTML(input.value);
+                    };
+                    input.editor = this;
+                    this.update();
+                }
+                var $ = function (id) { return document.getElementById(id); };
+                new Editor($("create-form-desc-input"), $("preview"));
+            </script>
+        </div>
     </dialog>
     <div>
         <script src="{{ url_for('static', filename='editing.js') }}"></script>
         <script>
             getMarkersAndDisplay();
         </script>
+        <div class="hidden popup" id="popup">
+            <h4 class="popup-title text-xl my-8" id="popup-title"></h4>
+            <div class="popup-description text-lg my-8" id="popup-description"></div>
+            <div id="popup-footer">
+                <h6 class="popup-layer popup-footer test-md rounded bg-teal-300 p-2 my-8" id="popup-layer"></h6>
+                <img onclick="editDialog();" id="popup-edit-control" class="popup-controls popup-footer edit-control" src="/static/pencil.png" height="25" width="25">
+                <img onclick="deleteMarker();" id="popup-delete-control" class="popup-controls popup-footer delete-control" src="/static/trash-bin-green.png" height="25" width="25">
+            </div>
+            <span id="popup-marker-id" class="hidden"></span>
+            <span id="popup-lat" class="hidden"></span>
+            <span id="popup-lng" class="hidden"></span>
+        </div>
     </div>
     <div id="attributions" hidden>
             <a href="https://www.flaticon.com/free-icons/edit" title="edit icons">Edit icons created by Freepik - Flaticon</a>

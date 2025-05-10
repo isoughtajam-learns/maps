@@ -119,13 +119,13 @@ def create_app() -> Flask:
         """
         query = POST_MARKER
         if not request.headers.get(AUTH_HEADER):
-            return add_custom_headers(make_response({}, 204))
+            return add_custom_headers(make_response({}, 201))
         if request.method == 'PATCH':
             query = PATCH_MARKER
         try:
             data = add_user_to_dict_from_auth_header(
                 request.headers.get(AUTH_HEADER), json.loads(
-                request.data.decode('utf-8')))
+                    request.data.decode('utf-8')))
             cur = conn.cursor()
             cur.execute(query, serialize_post_pin(data))
         except JSONDecodeError as e:
@@ -231,4 +231,3 @@ def create_app() -> Flask:
         return render_template('palette.html')
 
     return app
-

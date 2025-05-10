@@ -6,8 +6,6 @@
         crossorigin=""/>
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}" />
-<!--    <link rel="stylesheet"-->
-<!--          href="{{ url_for('static', filename='skeleton.css') }}" />-->
     <link rel="shortcut icon"
           href="{{ url_for('static', filename='favicon-32x32.png') }}">
     <link href="https://fonts.cdnfonts.com/css/futura-pt" rel="stylesheet">
@@ -25,12 +23,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
 </head>
-<body class="bg-stone-100">
-    <header>
-        {% block header %}{% endblock %}
-    </header>
-    <div id="container" class="container w-full h-full">
-        {% block container %}{% endblock %}
+<body class="bg-stone-50 text-zinc-800 p-2">
+    <div class="flex flex-col min-h-screen">
+        <header class="bg-stone-100 py-2" id="header">
+            {% block header %}{% endblock %}
+        </header>
+        <div class="flex flex-col md:flex-row flex-grow mb-2" id="container">
+            {% block container %}{% endblock %}
+        </div>
+        <footer class="bg-slate-300 p-4 mb-2 divide-x-1 divide-dashed text-center">
+            <span class="inline px-2" id="copyright">© Copyright 2025, Gautam Joshi</span>
+            <a href="https://www.podbean.com/site/EpisodeDownload/DIR24D2598DMKVJX" class="inline px-2" id="footer-read-this">Listen to this</a>
+            <a href="https://web.archive.org/web/20250328211825/https://defector.com/kingdom-of-the-biters" class="inline px-2" id="footer-head-this">Read this</a>
+            <a href="https://mappingprejudice.umn.edu/take-action/volunteer" class="inline px-2" id="footer-then-do-this">Then do this</a>
+            <a href="https://bsky.app/profile/isoughtajam.bsky.social" class="inline px-2" id="footer-support">Please support this project</a>
+        </footer>
     </div>
 </body>
 </html>
