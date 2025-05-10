@@ -11,6 +11,12 @@ map.zoomControl.setPosition('topright');
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
+
+const search = new GeoSearch.GeoSearchControl({
+  provider: new GeoSearch.OpenStreetMapProvider(),
+});
+
+map.addControl(search);
 let editLayerGroup = L.layerGroup().addTo(map);
 let keepersLayerGroup = L.layerGroup().addTo(map);
 let overlayMaps = {};
