@@ -5,8 +5,8 @@
         </span></a>
         <span class="inline-block mr-3 my-auto align-baseline text-xs" id="apiVersion"></span>
         <span class="inline-block mx-3 my-auto align-baseline text-lg" id="welcome-user"></span>
-        <button id="logout-button" class="inline-block shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="localStorage.removeItem('username');localStorage.removeItem('token');">Log Out</button>
-        <button id="login-link" class="shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="window.location.href='/login'">Log In</button>
+        <button id="logout-button" class="inline-block shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="localStorage.removeItem('username');localStorage.removeItem('token');">Log Out</button>
+        <button id="login-link" class="shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded align-middle mx-2 float-right" onclick="window.location.href='/login'">Log In</button>
     </div>
 {% endblock %}
 {% block container %}
@@ -62,9 +62,9 @@
                     />
                 </div>
                 <button type="reset" id="cancel-form-button"
-                    class="float-left shadow-md my-auto mx-3 bg-gray-300 hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Cancel</button>
+                    class="float-left shadow-md my-auto mx-3 bg-gray-400 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Cancel</button>
                 <button type="submit" id="submit-form-button"
-                    class="float-right shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Map it.</button>
+                    class="float-right shadow-md my-auto mx-3 bg-teal-500 hover:bg-amber-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Map it.</button>
                 <div id="form-error-div"></div>
             </form>
             <script>
